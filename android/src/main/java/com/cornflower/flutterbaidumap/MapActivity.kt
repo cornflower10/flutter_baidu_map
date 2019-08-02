@@ -3,6 +3,7 @@ package com.cornflower.flutterbaidumap
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
@@ -15,10 +16,9 @@ import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.search.geocode.*
 import com.baidu.mapapi.search.poi.*
 import com.chad.library.adapter.base.BaseQuickAdapter
-import io.flutter.app.FlutterActivity
 import kotlinx.android.synthetic.main.activity_map.*
 
-class MapActivity : FlutterActivity(), BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener {
+class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener {
 
 
     lateinit var location: LocationClient
@@ -66,7 +66,7 @@ class MapActivity : FlutterActivity(), BaiduMap.OnMapStatusChangeListener, OnGet
                 var intent = Intent(this, SearchActivity::class.java)
                 intent.putExtra("city",city)
                 intent.putExtra("latLng",latLng)
-                startActivityForResult(intent, 99)
+              startActivityForResult(intent, 99)
             }
 
         }

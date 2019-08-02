@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="LaunchTheme" parent="@style/Theme.AppCompat.NoActionBar">
         <!-- Show a splash screen on the activity. Automatically removed when
              Flutter draws its first frame -->
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+    <style name="AppCompat" parent="@style/Theme.AppCompat.Light">
+        <!-- Show a splash screen on the activity. Automatically removed when
+             Flutter draws its first frame -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 </resources>

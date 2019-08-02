@@ -3,6 +3,7 @@ package com.cornflower.flutterbaidumap
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.KeyEvent
@@ -14,11 +15,10 @@ import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.search.poi.*
 import com.baidu.mapapi.search.sug.SuggestionSearch
 import com.chad.library.adapter.base.BaseQuickAdapter
-import io.flutter.app.FlutterActivity
 import kotlinx.android.synthetic.main.activity_search.*
 
 
-class SearchActivity : FlutterActivity(), OnGetPoiSearchResultListener {
+class SearchActivity : AppCompatActivity(), OnGetPoiSearchResultListener {
 
     lateinit var listLocationAdapter: SearchAdapter
     var list: List<Location> = ArrayList()
@@ -27,7 +27,12 @@ class SearchActivity : FlutterActivity(), OnGetPoiSearchResultListener {
     var ll:LatLng?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        try {
+            setContentView(R.layout.activity_search)
+        }catch (e:Exception){
+          e.printStackTrace()
+        }
+
         listLocationAdapter = SearchAdapter(list)
         rv.adapter = listLocationAdapter
         rv.layoutManager = LinearLayoutManager(this)
