@@ -1,6 +1,6 @@
-name: flutter_baidu_map
+name: flutter_baidu_map_sdk
 description: A new Flutter plugin.
-version: 0.0.2
+version: 0.0.1
 author: cornflower10 <makel.xie@gmail.com>
 homepage: https://github.com/cornflower10/flutter_baidu_map
 
