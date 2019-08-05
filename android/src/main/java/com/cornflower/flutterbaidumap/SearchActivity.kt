@@ -121,7 +121,8 @@ class SearchActivity : AppCompatActivity(), OnGetPoiSearchResultListener {
                 mutableList.add(location)
 
             }
-            listLocationAdapter?.replaceData(mutableList)
+            list = mutableList
+            listLocationAdapter?.replaceData(list)
         }else{
             mutableList?.clear()
             listLocationAdapter?.notifyDataSetChanged()
@@ -158,9 +159,6 @@ class SearchActivity : AppCompatActivity(), OnGetPoiSearchResultListener {
 //        poiSearch.destroy()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
 
-    }
 
 }

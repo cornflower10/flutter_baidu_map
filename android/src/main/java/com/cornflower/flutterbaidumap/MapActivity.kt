@@ -30,6 +30,7 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
     var list: List<Location> = ArrayList()
     var city:String?=null
     var latLng:LatLng?=null
+    var lastIndex = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -61,6 +62,10 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
             finish()
         }
 
+        bt_cancle.setOnClickListener {
+            finish()
+        }
+
         tv_search.setOnClickListener {
             if (!TextUtils.isEmpty(city)){
                 var intent = Intent(this, SearchActivity::class.java)
@@ -70,18 +75,19 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
             }
 
         }
-        var lastIndex = -1
+
         listLocationAdapter = ListLocationAdapter(list)
         listLocationAdapter.setOnItemClickListener(object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                 if (lastIndex != position) {
-                    updateLocation(list.get(position).poi.location)
-                    this@MapActivity.address = location?.let { list.get(position).poi.name }
+                    var temp = list.get(position).poi
+                    address = temp.getName()
+                    updateLocation(temp.location)
                 }
             }
 
         })
-        rv.adapter = listLocationAdapter;
+        rv.adapter = listLocationAdapter
         rv.layoutManager = LinearLayoutManager(this)
     }
 
@@ -124,12 +130,17 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
         mutableList.clear()
         for ((index, value) in listLocation?.withIndex()!!) {
             var location = Location()
-            if (index == 0) location.isChoose = true else location.isChoose = false
+            if (value.location.latitude==latLng?.latitude &&
+                    value.location.longitude==latLng?.longitude) location.isChoose = true else location.isChoose = false
             location.poi = value
+            if(!mutableList.contains(location))
             mutableList.add(location)
 
         }
-        this@MapActivity.listLocationAdapter.replaceData(mutableList)
+        list = mutableList
+         lastIndex = -1
+        this@MapActivity.listLocationAdapter.replaceData(list)
+        this@MapActivity.rv.smoothScrollToPosition(0)
     }
 
     override fun onResume() {
@@ -194,17 +205,18 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
         }
 
         override fun onReceiveLocation(location: BDLocation?) {
-            this@MapActivity.address = location?.let { location.addrStr }
-            this@MapActivity.city = location?.city
-            val locData = location?.radius?.let {
-                MyLocationData.Builder()
-                        .accuracy(it)
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
-                        .direction(location.getDirection()).latitude(location.getLatitude())
-                        .longitude(location.getLongitude()).build()
-            }
-            this@MapActivity.bdMap.setMyLocationData(locData)
+
             if (this@MapActivity.isFirstLoc) {
+                this@MapActivity.address = location?.let { location.addrStr }
+                this@MapActivity.city = location?.city
+                val locData = location?.radius?.let {
+                    MyLocationData.Builder()
+                            .accuracy(it)
+                            // 此处设置开发者获取到的方向信息，顺时针0-360
+                            .direction(location.getDirection()).latitude(location.getLatitude())
+                            .longitude(location.getLongitude()).build()
+                }
+                this@MapActivity.bdMap.setMyLocationData(locData)
 //                location?.locationDescribe
                 this@MapActivity.isFirstLoc = false
 
@@ -221,9 +233,10 @@ class MapActivity : AppCompatActivity(), BaiduMap.OnMapStatusChangeListener, OnG
     }
 
     private fun updateLocation(ll: LatLng) {
+        latLng = ll
         val u = MapStatusUpdateFactory.newLatLngZoom(ll, 17f)
         bdMap.animateMapStatus(u)
-        latLng = ll
+
     }
 
 
